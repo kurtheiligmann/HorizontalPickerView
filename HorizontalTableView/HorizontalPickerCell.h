@@ -15,7 +15,7 @@
 
 @property (nonatomic, weak) id<HorizontalPickerCellDelegate> delegate;
 @property (nonatomic, weak) id<HorizontalPickerCellDataSource> dataSource;
-@property (nonatomic, readonly) NSInteger selectedItemIndex;
+@property (nonatomic) NSInteger selectedItemIndex;
 
 + (id)instanceFromXib;
 

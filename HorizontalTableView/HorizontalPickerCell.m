@@ -15,10 +15,7 @@
 
 @implementation HorizontalPickerCell
 
-+ (id)instanceFromXib {
-    HorizontalPickerCell *instance = [[NSBundle bundleForClass:[self class]] loadNibNamed:[[self class] description] owner:nil options:nil][0];
-    return instance;
-}
+#pragma mark - UITableViewCell
 
 - (NSString *)reuseIdentifier {
     return [[self class] description];
@@ -29,6 +26,14 @@
     self.collectionView.contentSize = CGSizeMake(self.collectionView.contentSize.width + self.bounds.size.width, self.collectionView.contentSize.height);
 }
 
+#pragma mark - HorizontalPickerCell
+
++ (id)instanceFromXib {
+    HorizontalPickerCell *instance = [[NSBundle bundleForClass:[self class]] loadNibNamed:[[self class] description] owner:nil options:nil][0];
+    return instance;
+}
+
+
 - (NSInteger)selectedItemIndex {
     CGFloat itemWidth = [self.dataSource itemWidth];
     CGFloat collectionViewOffset = self.scrollView.contentOffset.x;
@@ -36,6 +41,10 @@
     CGFloat numberOfItemsScrolled = collectionViewOffset / itemWidth;
     
     return (int)round(numberOfItemsScrolled);
+}
+
+- (void)setSelectedItemIndex:(NSInteger)selectedItemIndex {
+    [self snapToItemIndex:MAX(0, selectedItemIndex)];
 }
 
 - (void)setDataSource:(id<HorizontalPickerCellDataSource>)dataSource {
@@ -57,6 +66,16 @@
     self.scrollView.contentSize = CGSizeMake(self.collectionView.frame.size.width + self.scrollView.frame.size.width - itemWidth, self.scrollView.frame.size.height);
 }
 
+#pragma mark - Private Methods
+
+- (void)snapToItemIndex:(NSInteger)itemIndex {
+    [self.scrollView setContentOffset:CGPointMake(MIN(itemIndex, [self.dataSource numberOfItems] - 1) * [self.dataSource itemWidth], 0) animated:YES];
+}
+
+- (void)snapToNearestScrollableItemIndex {
+    [self snapToItemIndex:self.selectedItemIndex];
+}
+
 #pragma mark - UICollectionViewDataSource
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
@@ -68,12 +87,10 @@
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    NSLog(@"indexPath: %@", indexPath);
     static NSString *cellId = @"cellId";
     UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:cellId forIndexPath:indexPath];
     
     UIView *currentView = [self.delegate viewForItemIndex:indexPath.row];
-    NSLog(@"currentView: %@", currentView);
     
     if (cell == nil) {
         cell = [[UICollectionViewCell alloc] initWithFrame:currentView.frame];
@@ -88,8 +105,12 @@
 
 #pragma mark - UIScrollViewDelegate
 
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    NSLog(@"%@", scrollView);
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+    [self snapToNearestScrollableItemIndex];
+}
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
+    [self snapToNearestScrollableItemIndex];
 }
 
 @end

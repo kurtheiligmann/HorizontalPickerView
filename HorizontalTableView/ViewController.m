@@ -9,10 +9,40 @@
 #import "HorizontalPickerCell.h"
 #import "ViewController.h"
 
+static NSInteger const kNumberOfRows = 5;
+
 @interface ViewController ()<UITableViewDataSource, UITableViewDelegate, HorizontalPickerCellDelegate, HorizontalPickerCellDataSource>
+@property (nonatomic, strong) NSMutableArray *cells;
 @end
 
 @implementation ViewController
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    self.cells = [NSMutableArray array];
+    
+    for (NSInteger i = 0; i < kNumberOfRows; i++) {
+        [self.cells addObject:[NSNull null]];
+    }
+}
+
+- (IBAction)getButtonPressed {
+    for (HorizontalPickerCell *cell in self.cells) {
+        if ([cell respondsToSelector:@selector(selectedItemIndex)]) {
+            NSLog(@"%s: %li", __PRETTY_FUNCTION__, (long)cell.selectedItemIndex);
+        }
+    }
+}
+
+- (IBAction)setButtonPressed {
+    for (HorizontalPickerCell *cell in self.cells) {
+        if ([cell respondsToSelector:@selector(setSelectedItemIndex:)]) {
+            cell.selectedItemIndex = 50;
+            NSLog(@"%s: %li", __PRETTY_FUNCTION__, (long)cell.selectedItemIndex);
+        }
+    }
+}
 
 #pragma mark - UITableViewDelegate
 
@@ -23,7 +53,7 @@
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 1;
+    return kNumberOfRows;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -37,13 +67,7 @@
         cell.dataSource = self;
     }
     
-//    NSMutableArray *views = [NSMutableArray array];
-//    for (NSInteger i = 0; i < 15; i++) {
-//        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 50, 50)];
-//        label.text = [NSString stringWithFormat:@"%li", (long)i];
-//        label.textAlignment = NSTextAlignmentCenter;
-//        [views addObject:label];
-//    }
+    [self.cells insertObject:cell atIndex:indexPath.row];
     
     return cell;
 }
@@ -52,6 +76,10 @@
 
 - (NSInteger)numberOfItems {
     return 15;
+}
+
+- (CGFloat)itemWidth {
+    return 50;
 }
 
 #pragma mark - HorizontalPickerCellDelegate
