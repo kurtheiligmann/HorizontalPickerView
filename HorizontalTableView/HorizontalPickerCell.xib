@@ -13,29 +13,13 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="qoH-hp-gMH">
+                    <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GMz-uQ-z4I">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
-                        <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="ALG-DD-aI8">
-                            <size key="itemSize" width="50" height="50"/>
-                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
-                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                            <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
-                        </collectionViewFlowLayout>
-                        <connections>
-                            <outlet property="dataSource" destination="8vB-8i-bcv" id="MV2-NY-lOr"/>
-                            <outlet property="delegate" destination="8vB-8i-bcv" id="WAh-uu-1hL"/>
-                        </connections>
-                    </collectionView>
+                    </scrollView>
                 </subviews>
-                <constraints>
-                    <constraint firstAttribute="bottom" secondItem="qoH-hp-gMH" secondAttribute="bottom" id="60o-nB-tmB"/>
-                    <constraint firstItem="qoH-hp-gMH" firstAttribute="leading" secondItem="5KC-Sr-rv5" secondAttribute="leading" id="RDc-OD-m8n"/>
-                    <constraint firstItem="qoH-hp-gMH" firstAttribute="top" secondItem="5KC-Sr-rv5" secondAttribute="top" id="dc6-r5-ETy"/>
-                    <constraint firstAttribute="trailing" secondItem="qoH-hp-gMH" secondAttribute="trailing" id="pu0-3w-JmG"/>
-                </constraints>
             </tableViewCellContentView>
             <connections>
-                <outlet property="collectionView" destination="qoH-hp-gMH" id="4x3-VD-uEz"/>
+                <outlet property="scrollView" destination="GMz-uQ-z4I" id="WCl-BA-Ynl"/>
             </connections>
         </tableViewCell>
     </objects>

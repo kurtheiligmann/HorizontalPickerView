@@ -31,5 +31,6 @@
 @protocol HorizontalPickerCellDataSource <NSObject>
 
 - (NSInteger)numberOfItems;
+- (CGFloat)itemWidth;
 
 @end
